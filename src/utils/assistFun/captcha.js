@@ -12,9 +12,9 @@ function randomColor() {
 // 随机生成数字验证码
 const createNumberCaptcha = () => {
     var codeConfig = {
-        size: 6, // 验证码长度
+        size: 4, // 验证码长度
         ignoreChars: "0o1i", // 验证码字符中排除 0o1i
-        noise: Math.round(Math.random() * 3 + 3), // 干扰线条的数量
+        noise: Math.round(Math.random() * 2 + 2), // 干扰线条的数量
         height: 44,
         // background: randomColor(),
         color: true,

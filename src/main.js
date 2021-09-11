@@ -15,8 +15,14 @@ const app = new Koa();
 
 // 用来解析post请求的参数
 app.use(parser())
+
 // 动态对router中定义的路由进行实例化
 createRoute.apply(app)
+
+app.on("error", (ctx, info) => {
+    ctx.status = info.status
+    ctx.body = info.info;
+})
 
 
 app.listen(ENV.APP_PORT, ENV.APP_HOSTNAME, () => {

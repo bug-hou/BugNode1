@@ -1,5 +1,4 @@
-const ENV = require("./env");
-
+const ENV = require("../env");
 
 const mysql = require("mysql2");
 

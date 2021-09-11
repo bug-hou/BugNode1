@@ -3,9 +3,9 @@ const ENV = require("../utils/env")
 // 将对象转化为字符串
 const { stringify } = require("querystring");
 // 对课表数据数据进行处理
-const { Statistic } = require("../utils/infoParse");
+const { Statistic } = require("../utils/assistFun/infoParse");
 // 检验参数是否存在
-const { paramsExist } = require("../utils/paramsExist")
+const { paramsExist } = require("../utils/assistFun/paramsExist")
 // 获取错误信息
 const ERROR = require("../utils/error")
 
@@ -31,7 +31,7 @@ const getCapture = async (ctx, next) => {
     var result = viewStateReg.exec(defaultRes.data);
 
     if (!paramsExist(result[0])) {
-        return ctx.app.emit("error", ctx, ERROR[0])
+        return ctx.app.emit("error", ctx, ERROR.params_not_exits)
     }
     const [viewStateValue] = result;
     // 将viewStateValue值通过cookie传递给客户机
@@ -47,7 +47,7 @@ const getCapture = async (ctx, next) => {
     );
     // 验证是否获取成功
     if (!paramsExist(session[0])) {
-        return ctx.app.emit("error", ctx, ERROR[0])
+        return ctx.app.emit("error", ctx, ERROR.params_not_exits)
     }
     const [cookie] = session;
     // 将获取的cookie值发送到客户机
@@ -67,7 +67,7 @@ const verifyId = async (ctx, next) => {
     var sessionId = ctx.cookies.get("ASP.NET_SessionId");
     // 对参数进行验证
     if (!paramsExist(username, password, capture, viewStateValue, sessionId)) {
-        return ctx.app.emit("error", ctx, ERROR[0]);
+        return ctx.app.emit("error", ctx, ERROR.params_not_exits);
     }
     const response = await install.post(
         "/default2.aspx",
@@ -97,7 +97,7 @@ const verifyId = async (ctx, next) => {
     if (/(?<=id="xhxm">).*?(?=<\/span>)/.test(data.toString("utf-8")))
         await next();
     else {
-        return ctx.app.emit("error", ctx, ERROR[1]);
+        return ctx.app.emit("error", ctx, ERROR.params_error);
     }
 };
 
@@ -106,7 +106,7 @@ const getCourseInfo = async (ctx, next) => {
     const { username } = ctx.request.body;
     const sessionId = ctx.cookies.get("ASP.NET_SessionId");
     if (!paramsExist(username, sessionId)) {
-        return ctx.app.emit("error", ctx, ERROR[0])
+        return ctx.app.emit("error", ctx, ERROR.params_not_exits)
     }
     const response = await install.get(
         `/xskbcx.aspx?xh=${username}&gnmkdm=N121603`,
@@ -143,7 +143,7 @@ const selectCourse = async (ctx, next) => {
     var viewStateValue = ctx.cookies.get("viewStateValue");
     var sessionId = ctx.cookies.get("ASP.NET_SessionId");
     if (!paramsExist(id, xnd, xqd, sessionId, viewStateValue)) {
-        return ctx.app.emit("error", ctx, ERROR[0]);
+        return ctx.app.emit("error", ctx, ERROR.params_not_exits);
     }
     const response = await axios.default.post(
         `http://118.122.80.196:8088/xskbcx.aspx?xh=${id}&gnmkdm=N121603`,
