@@ -1,12 +1,6 @@
 // 使用中间件
 const privateMiddles = require("../middles/entry.middle")
 
-const useCaptcha = require("../utils/assistFun/encrype");
-const paramsExist = require("../utils/assistFun/paramsExist");
-const myError = require("../utils/error")
-const privateServers = require("../server/entry.server")
-const nodeMailer = require("nodemailer")
-const util = require('util');
 
 const Router = require("koa-router")
 

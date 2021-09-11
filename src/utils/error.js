@@ -22,5 +22,9 @@ module.exports = {
     verity_error: {
         status: 401,
         info: "params verity error,参数验证失败"
+    },
+    sql_sentence_error: {
+        status: 401,
+        info: "sql sentence error, sql语句错误"
     }
 }

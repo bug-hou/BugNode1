@@ -5,7 +5,6 @@ const paramsExist = require("../utils/assistFun/paramsExist");
 const myError = require("../utils/error")
 const privateServers = require("../server/entry.server")
 const nodeMailer = require("nodemailer")
-const util = require('util');
 
 const createCaptchaMiddle = async (ctx, next) => {
     // 获取验证码信息对象
@@ -56,14 +55,12 @@ const verityUserExist = async (ctx, next) => {
 // 生成token和验证码密码
 const createToken = async (ctx, next) => {
     const result = await privateServers.getUsername(ctx.username, ctx.password);
-
     if (!result.length) {
         return ctx.app.emit("error", ctx, myError.verity_error)
     }
     const { id, username } = result[0];
-
-    const token = await crypto.tokenEnCrypt({ id, username });
-
+    const token = await useCaptcha.tokenEnCrypt({ id, username });
+    console.log(token)
     ctx.body = {
         token
     }
@@ -108,10 +105,10 @@ const sendEmail = async (ctx, next) => {
 
 // 验证码传递的参数和验证码
 const verityRegisterParams = async (ctx, next) => {
-    const { username, password, captcha } = ctx.request.body;
+    const { username, password, captcha, email } = ctx.request.body;
     const cryptoCode = ctx.cookies.get("emailCaptcha");
     // 对参数进行检验
-    if (!paramsExist.paramsExist(username, password, captcha, cryptoCode)) {
+    if (!paramsExist.paramsExist(username, password, captcha, cryptoCode, email)) {
         return ctx.app.emit("error", ctx, myError.params_not_exits)
     }
     // 对传入的code进行加密
@@ -123,6 +120,7 @@ const verityRegisterParams = async (ctx, next) => {
 
     ctx.username = username;
     ctx.password = password;
+    ctx.email = email;
 
     await next();
 }
@@ -133,8 +131,9 @@ const createUserInfo = async (ctx, next) => {
     if (paramsExist.paramsExist(checkResult[0])) {
         return ctx.app.emit("error", ctx, myError.username_exist)
     }
-    await privateServers.insertUsername(ctx.username, ctx.password);
-    ctx.body = "创建成功"
+    const password = useCaptcha.useMd5Crypto(ctx.password)
+    await privateServers.insertUsername(ctx.username, password, ctx.email);
+    ctx.body = "创建成功";
 }
 
 // 封装的一个方法

@@ -1,10 +1,13 @@
 const insertSql = {
-    create_user: "insert into users(username,password) values(?,?)"
+    create_user: "insert into users(username,password,email) values(?,?,?)"
 }
 
 const selectSql = {
     check_user: "select username,id from users where username = ? && password = ?",
-    check_exist: "select id from users where username = ?"
+    check_exist: "select id from users where username = ?",
+    get_count: "select * from weather_district_id where province = ? && city = ?",
+    get_citys: "select city from weather_district_id where province = ? GROUP BY city",
+    get_province: "select province from weather_district_id group by province",
 }
 
 module.exports = {

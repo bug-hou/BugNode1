@@ -15,8 +15,8 @@ const checkUsername = async (username) => {
 
 // 获取用户信息
 const getUsername = async (username, password) => {
-    const [result] = await connect.execute(sqlSentence.selectSql.check_user, [username, password]);
-    return result;
+    const result = await connect.execute(sqlSentence.selectSql.check_user, [username, password]);
+    return result[0];
 }
 
 module.exports = {

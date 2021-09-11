@@ -7,6 +7,7 @@ utils：用来写一些辅助工具
 router：定义路由
 middles：定义中间件
 utils/key：存放公钥和私钥
+utils/assistFun：存放工具类函数
 server：操作数据库
 
 ### 文件说明
@@ -18,6 +19,7 @@ main：入口文件，用来开启服务器
 index.js：导出一个函数，动态对每个路由进行实例化
 studentInfo.router.js：用于学生获取课程表的信息
 entryInto.router.js：登录路由
+bdapi.router.js：使用百度相关的 api 接口
 
 #### utils 文件下
 
@@ -56,6 +58,13 @@ entry.middle.js：所有关于注册和登录的中间件
 3. /entry/email：获取邮箱验证码(post captcha,email)
 4. /entry/register：注册账号(post username,password,captcha)
 
+##### 获取天气信息和城市信息
+
+1. /weather/provinces：获取县(get)
+2. /weather/citys?province=省份：获取市(get)
+3. /weather/district?province=省&city=市：获取县(get)
+4. /weather/data?cityId=510800：获取对应的天气信息(get)
+
 # 使用的插件
 
 1. koa：开启服务器
@@ -76,3 +85,4 @@ dotenv.config().parsed:获取.env 文件的属性
 8. mysql2：连接 mysql
 9. svg-capatch：生成验证码
 10. axios：发送网络请求
+11. jsonwebtoken：对用户信息进行加密
