@@ -16,7 +16,7 @@ const parseToken = async (ctx, next) => {
     if (!user) {
         return ctx.app.emit("error", ctx, myError.params_not_exits);
     }
-    ctx.user = user;
+    ctx.user = user.id;
     await next();
 };
 

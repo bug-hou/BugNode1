@@ -3,6 +3,7 @@ const Router = require("koa-router");
 const ENV = require("../utils/env")
 const { addSuffix } = require("../utils/assistFun/file")
 const publicMiddles = require("../middles/public.middle")
+const privateServers = require("../server/image.server")
 
 const multer = require("koa-multer");
 
@@ -29,21 +30,39 @@ const route = new Router({ prefix: "/image" });
 
 // 头像接口
 route.post("/avator", publicMiddles.parseToken, avatorHandle, async (ctx, next) => {
+    const { id } = ctx.user;
+    const { filename, mimetype } = ctx.req.file;
+    const ext = mimetype.slice(6,);
+    await privateServers.insertAvator(filename + "." + ext, id);
+    await next();
+}, async (ctx, next) => {
     const { filename, mimetype, size } = ctx.req.file;
-    console.log(filename)
     addSuffix(filename, mimetype, ENV.AVATOR_ADDRESS);
     ctx.body = "上传成功"
 })
 
 // web端头像接口
-route.post("/webback", webBackHandle, async (ctx, next) => {
+route.post("/webback", publicMiddles.parseToken, webBackHandle, async (ctx, next) => {
+    const { id } = ctx.user;
+    const { filename, mimetype } = ctx.req.file;
+    const ext = mimetype.slice(6,);
+    await privateServers.insertWebBack(filename + "." + ext, id);
+    await next();
+}, async (ctx, next) => {
     const { filename, mimetype, size } = ctx.req.file;
     addSuffix(filename, mimetype, ENV.WEB_BACK_IMAGE);
     ctx.body = "上传成功"
 })
 
-// 
-route.post("/phoneback", phoneHandle, async (ctx, next) => {
+// 保存手机端的壁纸
+route.post("/phoneback", publicMiddles.parseToken, phoneHandle, async (ctx, next) => {
+    const { id } = ctx.user;
+    const { filename, mimetype } = ctx.req.file;
+    const ext = mimetype.slice(6,);
+    console.log(filename + ext)
+    await privateServers.insertPhoneBack(filename + "." + ext, id);
+    await next();
+}, async (ctx, next) => {
     const { filename, mimetype, size } = ctx.req.file;
     addSuffix(filename, mimetype, ENV.PHONE_IMAGE);
     ctx.body = "上传成功"

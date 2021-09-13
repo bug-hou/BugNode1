@@ -65,6 +65,12 @@ entry.middle.js：所有关于注册和登录的中间件
 3. /weather/district?province=省&city=市：获取县(get)
 4. /weather/data?cityId=510800：获取对应的天气信息(get)
 
+##### 新闻
+
+1. /news/:type：获取新闻(get)
+2. /new/types：获取新闻列表(get)
+3. /new/detail/:uniquekey：获取新闻详情信息(get)
+
 # 使用的插件
 
 1. koa：开启服务器

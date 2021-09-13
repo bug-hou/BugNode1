@@ -1,5 +1,11 @@
 const insertSql = {
-    create_user: "insert into users(username,password,email) values(?,?,?)"
+    create_user: "insert into users(username,password,email) values(?,?,?)",
+}
+
+const updateSql = {
+    update_user_avator: "update users set avator = ? where id = ?",
+    update_user_webback: "update users set webbackimage = ? where id = ?",
+    update_user_phoneback: "update users set phonebackimage = ? where id = ?"
 }
 
 const selectSql = {
@@ -12,5 +18,6 @@ const selectSql = {
 
 module.exports = {
     insertSql,
+    updateSql,
     selectSql
 }
